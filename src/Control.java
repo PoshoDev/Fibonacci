@@ -131,7 +131,7 @@ public class Control extends JPanel implements ActionListener
 			int py = sty;
 			
 			int w;
-			int max = inp;
+			int max = (int) fibonacciCycle(inp);
 			
 			ori pivot = ori.NW;
 			
@@ -141,26 +141,26 @@ public class Control extends JPanel implements ActionListener
 				w = width(i, max);
 				g.drawRect(px, py, w, w);
 				
-				
+				System.out.println("FIB "+i+": "+w);
 				
 				switch(pivot)
 				{
-					case NW: px += width(i, max) ; break;
+					case NW: px += w ; break;
 					case NE:
-						px += (int) fibonacciCycle(i-2) * width(i-2, max) ;
-						py += curr;
+						px += width(i-2, max);
+						py += w;
 						
 					break;
 					case SE:
-						px -= (int) fibonacciCycle(i-1);
-						py += (int) fibonacciCycle(i-2);
+						px -= width(i-1, max);
+						py += width(i-2, max);
 					break;
-					case SW: py -= curr; break;
+					case SW: py -= width(i-1, max); break;
 				}
 				
 				pivot = (pivot==ori.SW) ? ori.NW : ori.values()[pivot.ordinal() + 1];
 				
-				curr = (int) fibonacciCycle(i-1);
+				//curr = (int) fibonacciCycle(i-1);
 				
 				
 			}
@@ -169,8 +169,11 @@ public class Control extends JPanel implements ActionListener
 	
 	public int width(int i, int max)
 	{
-		int len = (Main.rw / 2) - 16;
+		int len = 500;//(Main.rw / 2) - 16;
 		
-		return len * (i / max);
+		int fib = (int) fibonacciCycle(i);
+		int result = (int) ((float)len * ((float)fib / (float)max));
+		System.out.println(len+" * ("+fib+" / "+max+") = "+result);
+		return result;
 	}
 }
