@@ -1,6 +1,7 @@
 import java.awt.Button;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Label;
@@ -81,7 +82,7 @@ public class Control extends JPanel implements ActionListener
 		result.setText("es: "+fib+" (resultado en "+timeTotal+" milisegundos).");
 		System.out.println(fib+" (resultado en "+timeTotal+" milisegundos).");
 		
-		
+		removeAll();
 		repaint();
 	}
 	
@@ -96,9 +97,9 @@ public class Control extends JPanel implements ActionListener
 	
 	public long fibonacciCycle(int n)
 	{
-		int fib = 0;
-		int v1 = 1;
-		int v2 = 0;
+		long fib = 0;
+		long v1 = 1;
+		long v2 = 0;
 		
 		while (n > 0)
 		{
@@ -113,6 +114,7 @@ public class Control extends JPanel implements ActionListener
 	
 	public void paint(Graphics g)
 	{
+		super.paintComponent(g);
 		fibonacciDraw(g);
 	}
 	
@@ -122,23 +124,24 @@ public class Control extends JPanel implements ActionListener
 	{
 		if (fib != 0)
 		{
-			int stx = 16;
-			int sty = 32;
+			int px = 16;
+			int py = 32;
 			
-			int curr = (int) fib;
-			
-			int px = stx;
-			int py = sty;
-			
-			int w;
-			int max = (int) fibonacciCycle(inp);
+			long max = fibonacciCycle(inp);
 			
 			ori pivot = ori.NW;
 			
 			for (int i=inp; i>0; i--)
 			{
-				w = width(i, max);
+				int w = width(i, max);
+				
+				g.setColor(randomColor());
+				g.fillRect(px, py, w, w);
+				g.setColor(Color.black);
 				g.drawRect(px, py, w, w);
+				
+				if (w > 64)
+					g.drawString(""+fibonacciCycle(i), px+4, py+g.getFont().getSize()+4);
 				
 				
 				switch(pivot)
@@ -171,10 +174,28 @@ public class Control extends JPanel implements ActionListener
 		}
 	}
 	
-	public int width(int i, int max)
+	public int width(int i, long max)
 	{
 		float len = (float) (((float)Main.rw / 1.65) - 16);
 		int fib = (int) fibonacciCycle(i);
 		return (int) (len * ((float)fib / (float)max));
+	}
+	
+	public Color randomColor()
+	{
+		int max = 5;
+		int min = 0;
+		int rand = (int) ((Math.random() * ((max - min) + 1)) + min);
+		
+		switch(rand)
+		{
+			case 0:	return Color.red;	
+			case 1:	return Color.blue;
+			case 2:	return Color.yellow;
+			case 3:	return Color.green;
+			case 4:	return Color.orange;
+			case 5:	return Color.pink;
+		}
+		return Color.black;
 	}
 }
