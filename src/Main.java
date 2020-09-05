@@ -7,7 +7,7 @@ public class Main
 	static JFrame frame =  new JFrame();
 	
 	static int rw = 1000;
-	static int rh = 1000;
+	static int rh = 680;
 	
 	
 	public static void main(String args[])

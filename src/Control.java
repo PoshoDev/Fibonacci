@@ -137,43 +137,44 @@ public class Control extends JPanel implements ActionListener
 			
 			for (int i=inp; i>0; i--)
 			{
-				
 				w = width(i, max);
 				g.drawRect(px, py, w, w);
 				
-				System.out.println("FIB "+i+": "+w);
 				
 				switch(pivot)
 				{
-					case NW: px += w ; break;
-					case NE:
-						px += width(i-2, max);
-						py += w;
-						
+					case NW:
+						g.drawArc(px, py, w*2, w*2, 90, 90);
+						px += w;
 					break;
+					
+					case NE:
+						g.drawArc(px-w, py, w*2, w*2, 0, 90);
+						px += width(i-2, max);
+						py += w;						
+					break;
+					
 					case SE:
+						g.drawArc(px-w, py-w, w*2, w*2, 270, 90);
 						px -= width(i-1, max);
 						py += width(i-2, max);
 					break;
-					case SW: py -= width(i-1, max); break;
+					
+					case SW:
+						g.drawArc(px, py-w, w*2, w*2, 180, 90);
+						py -= width(i-1, max);
+					break;
 				}
 				
 				pivot = (pivot==ori.SW) ? ori.NW : ori.values()[pivot.ordinal() + 1];
-				
-				//curr = (int) fibonacciCycle(i-1);
-				
-				
 			}
 		}
 	}
 	
 	public int width(int i, int max)
 	{
-		int len = 500;//(Main.rw / 2) - 16;
-		
+		float len = (float) (((float)Main.rw / 1.65) - 16);
 		int fib = (int) fibonacciCycle(i);
-		int result = (int) ((float)len * ((float)fib / (float)max));
-		System.out.println(len+" * ("+fib+" / "+max+") = "+result);
-		return result;
+		return (int) (len * ((float)fib / (float)max));
 	}
 }
