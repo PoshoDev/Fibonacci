@@ -1,0 +1,1 @@
+![](https://github.com/PoshoDev/Fibonacci/blob/master/fibo.gif?raw=true)
