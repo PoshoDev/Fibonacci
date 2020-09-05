@@ -131,20 +131,23 @@ public class Control extends JPanel implements ActionListener
 			int py = sty;
 			
 			int w;
+			int max = inp;
 			
 			ori pivot = ori.NW;
 			
 			for (int i=inp; i>0; i--)
 			{
-				g.drawRect(px, py, curr, curr);
+				
+				w = width(i, max);
+				g.drawRect(px, py, w, w);
 				
 				
 				
 				switch(pivot)
 				{
-					case NW: px += curr; break;
+					case NW: px += width(i, max) ; break;
 					case NE:
-						px += (int) fibonacciCycle(i-2);
+						px += (int) fibonacciCycle(i-2) * width(i-2, max) ;
 						py += curr;
 						
 					break;
@@ -162,5 +165,12 @@ public class Control extends JPanel implements ActionListener
 				
 			}
 		}
+	}
+	
+	public int width(int i, int max)
+	{
+		int len = (Main.rw / 2) - 16;
+		
+		return len * (i / max);
 	}
 }
