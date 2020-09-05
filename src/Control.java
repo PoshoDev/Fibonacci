@@ -1,6 +1,8 @@
 import java.awt.Button;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -14,6 +16,7 @@ public class Control extends JPanel implements ActionListener
 	private static final long serialVersionUID = 1L;
 	
 	long fib;
+	int inp;
 	int[] box;
 	double time;
 	
@@ -58,24 +61,28 @@ public class Control extends JPanel implements ActionListener
 	{
 		result.setText(" Calculando...");
 		
-		long res, timeTotal;
+		inp = Integer.parseInt(input.getText());
+		long timeTotal;
 		
 		if (ch1.getState())
 		{
 			long timeStart = System.currentTimeMillis();
-			res = fibonacciCycle(Integer.parseInt(input.getText()));
+			fib = fibonacciCycle(inp);
 			timeTotal = System.currentTimeMillis() - timeStart;
 		}
 		else
 		{
 			long timeStart = System.currentTimeMillis();
-			res = fibonacciRecursive(Integer.parseInt(input.getText()));
+			fib = fibonacciRecursive(inp);
 			timeTotal = System.currentTimeMillis() - timeStart;
 		}
 		
 		
-		result.setText("es: "+res+" (resultado en "+timeTotal+" milisegundos).");
-		System.out.println(res+" (resultado en "+timeTotal+" milisegundos).");		
+		result.setText("es: "+fib+" (resultado en "+timeTotal+" milisegundos).");
+		System.out.println(fib+" (resultado en "+timeTotal+" milisegundos).");
+		
+		
+		repaint();
 	}
 	
 	
@@ -101,5 +108,59 @@ public class Control extends JPanel implements ActionListener
 			n--;
 		}
 		return fib;
+	}
+	
+	
+	public void paint(Graphics g)
+	{
+		fibonacciDraw(g);
+	}
+	
+	enum ori { NW, NE, SE, SW, LENGTH };
+	
+	public void fibonacciDraw(Graphics g)
+	{
+		if (fib != 0)
+		{
+			int stx = 16;
+			int sty = 32;
+			
+			int curr = (int) fib;
+			
+			int px = stx;
+			int py = sty;
+			
+			int w;
+			
+			ori pivot = ori.NW;
+			
+			for (int i=inp; i>0; i--)
+			{
+				g.drawRect(px, py, curr, curr);
+				
+				
+				
+				switch(pivot)
+				{
+					case NW: px += curr; break;
+					case NE:
+						px += (int) fibonacciCycle(i-2);
+						py += curr;
+						
+					break;
+					case SE:
+						px -= (int) fibonacciCycle(i-1);
+						py += (int) fibonacciCycle(i-2);
+					break;
+					case SW: py -= curr; break;
+				}
+				
+				pivot = (pivot==ori.SW) ? ori.NW : ori.values()[pivot.ordinal() + 1];
+				
+				curr = (int) fibonacciCycle(i-1);
+				
+				
+			}
+		}
 	}
 }
